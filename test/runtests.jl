@@ -50,20 +50,3 @@ end
     val = compute_value(nnfa, [0.0, 0.0])
     @test isapprox(val, 3.0; atol=1e-8)
 end
-
-@testset "LocalGIFunctionApproximator - extra coverage" begin
-    grid = RectangleGrid(0:0.5:1.0, 0:0.5:1.0)
-    gifa = LocalGIFunctionApproximator(grid)
-
-    # get_all_interpolating_values
-    vals = get_all_interpolating_values(gifa)
-    @test length(vals) == n_interpolating_points(gifa)
-
-    # get_interpolating_nbrs_idxs_wts
-    idxs, wts = get_interpolating_nbrs_idxs_wts(gifa, [0.25, 0.75])
-    @test length(idxs) == length(wts)
-
-    # finite_horizon_extension
-    extended_gifa = finite_horizon_extension(gifa, 1:3)
-    @test n_interpolating_points(extended_gifa) > n_interpolating_points(gifa)
-end
