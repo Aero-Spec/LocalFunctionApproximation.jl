@@ -1,5 +1,5 @@
 [![CI](https://github.com/Aero-Spec/LocalFunctionApproximation.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/Aero-Spec/LocalFunctionApproximation.jl/actions/workflows/CI.yml)
-[![Code Coverage](https://codecov.io/gh/sisl/LocalFunctionApproximation.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/sisl/LocalFunctionApproximation.jl)
+[![codecov](https://codecov.io/github/Aero-Spec/LocalFunctionApproximation.jl/graph/badge.svg?token=S27J5SQPU3)](https://codecov.io/github/Aero-Spec/LocalFunctionApproximation.jl)
 
 # LocalFunctionApproximation
 
