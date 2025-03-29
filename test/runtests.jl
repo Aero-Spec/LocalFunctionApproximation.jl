@@ -24,7 +24,7 @@ end
 
 @testset "LocalNNFunctionApproximator - kNN" begin
     raw_pts = vec([[Float64(x), Float64(y)] for x in 0:1, y in 0:1])
-    pts_matrix = hcat(raw_pts...)  # 2×N matrix
+    pts_matrix = hcat(raw_pts...)
     tree = KDTree(pts_matrix)
 
     nnfa = LocalNNFunctionApproximator(tree, raw_pts, 2)
@@ -41,8 +41,8 @@ end
 
 @testset "LocalNNFunctionApproximator - radius" begin
     raw_pts = vec([[Float64(x), Float64(y)] for x in 0:1, y in 0:1])
-    pts_matrix = hcat(raw_pts...)  # 2×N matrix
-    tree = KDTree(pts_matrix, Euclidean())  # ← FIXED
+    pts_matrix = hcat(raw_pts...)
+    tree = KDTree(pts_matrix, Euclidean())
 
     nnfa = LocalNNFunctionApproximator(tree, raw_pts, 1.0)
     set_all_interpolating_values(nnfa, fill(3.0, length(raw_pts)))
@@ -55,16 +55,15 @@ end
     grid = RectangleGrid(0:0.5:1.0, 0:0.5:1.0)
     gifa = LocalGIFunctionApproximator(grid)
 
-    # Cover get_all_interpolating_values
+    # get_all_interpolating_values
     vals = get_all_interpolating_values(gifa)
     @test length(vals) == n_interpolating_points(gifa)
 
-    # Cover get_interpolating_nbrs_idxs_wts
+    # get_interpolating_nbrs_idxs_wts
     idxs, wts = get_interpolating_nbrs_idxs_wts(gifa, [0.25, 0.75])
     @test length(idxs) == length(wts)
 
-    # Cover finite_horizon_extension
+    # finite_horizon_extension
     extended_gifa = finite_horizon_extension(gifa, 1:3)
     @test n_interpolating_points(extended_gifa) > n_interpolating_points(gifa)
 end
-
