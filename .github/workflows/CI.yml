@@ -1,4 +1,4 @@
-name: CI
+name: Julia CI
 
 on:
   push:
@@ -7,23 +7,27 @@ on:
   pull_request:
 
 jobs:
-  test:
+  test-and-coverage:
+    name: Julia 1.9 - Run Tests and Upload Coverage
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out repository
+        uses: actions/checkout@v2
 
-      - uses: julia-actions/setup-julia@v1
+      - name: Set up Julia 1.9
+        uses: julia-actions/setup-julia@v1
         with:
-          version: '1'
+          version: '1.9'
           arch: x64
 
-      - uses: julia-actions/julia-buildpkg@v1
+      - name: Build package
+        uses: julia-actions/julia-buildpkg@v1
 
       - name: Run tests
         uses: julia-actions/julia-runtest@v1
 
-      - name: Generate code coverage
+      - name: Generate coverage data
         uses: julia-actions/julia-processcoverage@v1
 
       - name: Upload coverage to Codecov
