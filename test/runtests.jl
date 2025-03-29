@@ -52,17 +52,20 @@ end
 end
 
 @testset "coverage for LocalGIFunctionApproximator methods" begin
-    grid = RectangleGrid(0:1.0, 0:1.0)
+    # Create a base grid with safe (unique) ranges
+    grid = RectangleGrid(0:1.0, 5:6.0)  # two unique axes
     gifa = LocalGIFunctionApproximator(grid)
     set_all_interpolating_values(gifa, [10.0, 20.0, 30.0, 40.0])
 
     @test get_all_interpolating_values(gifa) == [10.0, 20.0, 30.0, 40.0]
 
-    idxs, wts = get_interpolating_nbrs_idxs_wts(gifa, [0.5, 0.5])
+    idxs, wts = get_interpolating_nbrs_idxs_wts(gifa, [0.5, 5.5])
     @test length(idxs) == length(wts)
     @test isapprox(sum(wts), 1.0; atol=1e-8)
 
-    extended = finite_horizon_extension(gifa, 10:12)  # ✅ Fix here
+    # EXTEND the grid with a time-like range that does not overlap
+    extended = finite_horizon_extension(gifa, 100:102)
     @test isa(extended, LocalGIFunctionApproximator)
     @test n_interpolating_points(extended) > n_interpolating_points(gifa)
 end
+
