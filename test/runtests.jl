@@ -62,13 +62,7 @@ end
     @test length(idxs) == length(wts)
     @test isapprox(sum(wts), 1.0; atol=1e-8)
 
-    try
-        extended = finite_horizon_extension(gifa, 1:3)
-        @test isa(extended, LocalGIFunctionApproximator)
-        @test n_interpolating_points(extended) > n_interpolating_points(gifa)
-    catch e
-        @warn "Test failed with error:" exception=e
-        @test false  # Force test to fail visibly with captured error
-    end
+    extended = finite_horizon_extension(gifa, 10:12)  # ✅ Fix here
+    @test isa(extended, LocalGIFunctionApproximator)
+    @test n_interpolating_points(extended) > n_interpolating_points(gifa)
 end
-
