@@ -8,11 +8,10 @@ on:
 
 jobs:
   test:
-    name: Julia Tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Julia
@@ -21,7 +20,14 @@ jobs:
           version: '1.9'
 
       - name: Install dependencies
-        run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+        run: julia --project=. -e "using Pkg; Pkg.instantiate()"
 
-      - name: Run tests
-        run: julia --project=. -e 'using Pkg; Pkg.test()'
+      - name: Run tests with coverage
+        run: julia --project=. -e "using Pkg; Pkg.test(coverage=true); using Coverage; Coverage.LCOV.writefile(\"lcov.info\", Coverage.process_folder())"
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: Aero-Spec/LocalFunctionApproximation.jl
+          files: lcov.info
