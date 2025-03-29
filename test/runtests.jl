@@ -23,8 +23,8 @@ using .LocalFunctionApproximation
 end
 
 @testset "LocalNNFunctionApproximator - kNN" begin
-    raw_pts = [[x, y] for x in 0:1, y in 0:1]
-    pts_matrix = hcat(float.(raw_pts)...)  # Convert to Matrix{Float64}
+    raw_pts = vec([[Float64(x), Float64(y)] for x in 0:1, y in 0:1])
+    pts_matrix = hcat(raw_pts...)  # 2×N matrix
     tree = KDTree(pts_matrix)
 
     nnfa = LocalNNFunctionApproximator(tree, raw_pts, 2)
@@ -40,8 +40,8 @@ end
 end
 
 @testset "LocalNNFunctionApproximator - radius" begin
-    raw_pts = [[x, y] for x in 0:1, y in 0:1]
-    pts_matrix = hcat(float.(raw_pts)...)  # Convert to Matrix{Float64}
+    raw_pts = vec([[Float64(x), Float64(y)] for x in 0:1, y in 0:1])
+    pts_matrix = hcat(raw_pts...)  # 2×N matrix
     tree = KDTree(pts_matrix; metric=Euclidean())
 
     nnfa = LocalNNFunctionApproximator(tree, raw_pts, 1.0)
