@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/sisl/LocalFunctionApproximation.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/sisl/LocalFunctionApproximation.jl/actions/workflows/CI.yml)
+[![CI](https://github.com/Aero-Spec/LocalFunctionApproximation.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/Aero-Spec/LocalFunctionApproximation.jl/actions/workflows/CI.yml)
 [![Code Coverage](https://codecov.io/gh/sisl/LocalFunctionApproximation.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/sisl/LocalFunctionApproximation.jl)
 
 # LocalFunctionApproximation
