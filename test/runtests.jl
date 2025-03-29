@@ -1,39 +1,54 @@
-using LocalFunctionApproximation
 using Test
+using GridInterpolations
 using NearestNeighbors
-using StaticArrays
+using Distances
 
-# Only testing NNFA as the GIFA is just a wrapper
-# for the already tested GridInterpolations package
-points = [SVector(0.,0.), SVector(0.,1.), SVector(1.,1.), SVector(1.,0.)]
-nntree = KDTree(points)
-vals = [1., 1., -1., -1]
-k = 2
-r = 0.5*sqrt(2)
+# Load the main module
+include("../src/LocalFunctionApproximation.jl")
+using .LocalFunctionApproximation
 
-knnfa = LocalNNFunctionApproximator(nntree, points, k)
-set_all_interpolating_values(knnfa, vals)
+@testset "LocalGIFunctionApproximator" begin
+    grid = RectangleGrid(0:0.5:1.0, 0:0.5:1.0)
+    gifa = LocalGIFunctionApproximator(grid)
 
-@test n_interpolating_points(knnfa) == 4
+    # Set dummy values
+    set_all_interpolating_values(gifa, fill(1.0, n_interpolating_points(gifa)))
 
-for i = 1:10
-    point = [rand()/2, 0.5]
-    @test compute_value(knnfa, point) == 1.0
+    # Evaluate at interior point
+    val = compute_value(gifa, [0.25, 0.75])
+    @test isapprox(val, 1.0; atol=1e-8)
+
+    # Test multiple points
+    vals = compute_value(gifa, [[0.25, 0.75], [0.5, 0.5]])
+    @test all(isapprox(v, 1.0; atol=1e-8) for v in vals)
+
+    # Test interpolating point count
+    @test n_interpolating_points(gifa) == length(get_all_interpolating_points(gifa))
 end
 
-for i = 1:10
-    point = [1.0 - rand()/2., 0.5]
-    @test compute_value(knnfa, point) == -1.0
+@testset "LocalNNFunctionApproximator - kNN" begin
+    pts = [[x, y] for x in 0:1, y in 0:1]
+    tree = KDTree(pts)
+    nnfa = LocalNNFunctionApproximator(tree, pts, 2)
+
+    set_all_interpolating_values(nnfa, fill(2.0, length(pts)))
+
+    val = compute_value(nnfa, [0.1, 0.9])
+    @test isapprox(val, 2.0; atol=1e-8)
+
+    vals = compute_value(nnfa, [[0.1, 0.9], [0.5, 0.5]])
+    @test all(isapprox(v, 2.0; atol=1e-8) for v in vals)
+
+    @test n_interpolating_points(nnfa) == length(get_all_interpolating_points(nnfa))
 end
 
-rnnfa = LocalNNFunctionApproximator(nntree, points, r)
-set_all_interpolating_values(rnnfa,vals)
-for i = 1:10
-    point = [rand()/2, 0.5]
-    @test compute_value(rnnfa, point) == 1.0
-end
+@testset "LocalNNFunctionApproximator - radius" begin
+    pts = [[x, y] for x in 0:1, y in 0:1]
+    tree = KDTree(pts; metric=Euclidean())
+    nnfa = LocalNNFunctionApproximator(tree, pts, 1.0)
 
-for i = 1:10
-    point = [1.0 - rand()/2., 0.5]
-    @test compute_value(rnnfa, point) == -1.0
+    set_all_interpolating_values(nnfa, fill(3.0, length(pts)))
+
+    val = compute_value(nnfa, [0.0, 0.0])
+    @test isapprox(val, 3.0; atol=1e-8)
 end
