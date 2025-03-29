@@ -85,8 +85,10 @@ end
 
 Extend the grid along a new time dimension to support finite-horizon value functions.
 """
-function finite_horizon_extension(gifa::LocalGIFunctionApproximator, hor::StepRange{Int64,Int64})
+function finite_horizon_extension(gifa::LocalGIFunctionApproximator, hor::AbstractRange{Int})
     cut_points = gifa.grid.cuts
     extended_grid = RectangleGrid(cut_points..., hor)
     return LocalGIFunctionApproximator(extended_grid)
 end
+
+
