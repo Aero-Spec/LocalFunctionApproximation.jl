@@ -42,7 +42,7 @@ end
 @testset "LocalNNFunctionApproximator - radius" begin
     raw_pts = vec([[Float64(x), Float64(y)] for x in 0:1, y in 0:1])
     pts_matrix = hcat(raw_pts...)  # 2×N matrix
-    tree = KDTree(pts_matrix; metric=Euclidean())
+    tree = KDTree(pts_matrix, Euclidean())  # ← FIXED
 
     nnfa = LocalNNFunctionApproximator(tree, raw_pts, 1.0)
     set_all_interpolating_values(nnfa, fill(3.0, length(raw_pts)))
@@ -50,3 +50,4 @@ end
     val = compute_value(nnfa, [0.0, 0.0])
     @test isapprox(val, 3.0; atol=1e-8)
 end
+
