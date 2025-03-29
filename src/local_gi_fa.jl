@@ -85,8 +85,8 @@ end
 
 Extend the grid along a new time dimension to support finite-horizon value functions.
 """
-function finite_horizon_extension(gifa::LocalGIFunctionApproximator, hor::AbstractRange{Int})
-    cut_points = Tuple(gifa.grid)  # This safely extracts all axis ranges from the grid
+function finite_horizon_extension(gifa::LocalGIFunctionApproximator, hor::AbstractRange{<:Integer})
+    cut_points = Tuple(gifa.grid)  # Safely extracts all dimension axes
     extended_grid = RectangleGrid(cut_points..., hor)
     return LocalGIFunctionApproximator(extended_grid)
 end
