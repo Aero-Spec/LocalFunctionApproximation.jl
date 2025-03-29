@@ -13,6 +13,7 @@ function LocalGIFunctionApproximator(grid::G) where {G<:AbstractGrid}
     return LocalGIFunctionApproximator(grid, zeros(length(vertices(grid))))
 end
 
+
 ################ INTERFACE FUNCTIONS ################
 
 """
@@ -85,8 +86,8 @@ end
 
 Extend the grid along a new time dimension to support finite-horizon value functions.
 """
-function finite_horizon_extension(gifa::LocalGIFunctionApproximator, hor::AbstractRange{<:Integer})
-    cut_points = Tuple(gifa.grid)  # Safely extracts all dimension axes
+function finite_horizon_extension(gifa::LocalGIFunctionApproximator, hor::StepRange{Int64,Int64})
+    cut_points = gifa.grid.cutPoints
     extended_grid = RectangleGrid(cut_points..., hor)
     return LocalGIFunctionApproximator(extended_grid)
 end
