@@ -3,7 +3,7 @@ using GridInterpolations
 using NearestNeighbors
 using Distances
 
-# Load the main module
+# Load your module from source
 include("../src/LocalFunctionApproximation.jl")
 using .LocalFunctionApproximation
 
@@ -24,7 +24,7 @@ end
 
 @testset "LocalNNFunctionApproximator - kNN" begin
     raw_pts = [[x, y] for x in 0:1, y in 0:1]
-    pts_matrix = hcat(raw_pts...)  # Convert to 2×N matrix
+    pts_matrix = hcat(float.(raw_pts)...)  # Convert to Matrix{Float64}
     tree = KDTree(pts_matrix)
 
     nnfa = LocalNNFunctionApproximator(tree, raw_pts, 2)
@@ -41,7 +41,7 @@ end
 
 @testset "LocalNNFunctionApproximator - radius" begin
     raw_pts = [[x, y] for x in 0:1, y in 0:1]
-    pts_matrix = hcat(raw_pts...)  # Convert to 2×N matrix
+    pts_matrix = hcat(float.(raw_pts)...)  # Convert to Matrix{Float64}
     tree = KDTree(pts_matrix; metric=Euclidean())
 
     nnfa = LocalNNFunctionApproximator(tree, raw_pts, 1.0)
